@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper	namespace = "com.spring.tmz.mapper.Userinfo_mapper">
+	
+	<select id = "select_userinfo_list" resultType="com.spring.tmz.domain.UserinfoVO">
+		SELECT * FROM trip.tbl_userinfo WHERE user_id = #{user_id} AND user_pw = #{user_pw}
+	</select>
+	
+	
+	<resultMap id="authority_map" type="com.spring.tmz.domain.AuthorityVO" >
+		<result property="user_id" column="user_id"/>
+		<result property="role_name" column="role_name"/>
+	</resultMap>
+	
+	<resultMap id="userinfo_map" type="com.spring.tmz.domain.UserinfoVO">
+		<result property="user_id" column="user_id"/>
+		<result property="user_pw" column="user_pw"/>
+		<result property="user_name" column="user_name"/>
+		<result property="user_birth" column="user_birth"/>
+		<result property="user_regdate" column="user_regdate"/>
+		<result property="user_tag" column="user_tag"/>
+		<result property="user_rate" column="user_rate"/>
+		<result property="user_delflag" column="user_delflag"/>
+		<result property="enabled" column="enabled"/>
+		
+		<collection property="authority_list" resultMap="authority_map"/>
+	</resultMap>
+	
+	<!-- 회원 등록 -->
+	<insert id="insert_userinfo">
+		INSERT INTO trip.tbl_userinfo
+      	VALUES(#{user_id}, #{user_pw}, #{user_name}, #{user_birth}, DEFAULT, #{user_tag}, DEFAULT, DEFAULT, DEFAULT) 
+    </insert>
+	
+	<!-- 회원 권한 추가 -->
+	<insert id="insert_user_authority">
+		INSERT INTO trip.tbl_user_auth
+		VALUES (#{user_id}, #{role_name})
+	</insert>
+	
+	<!-- 권한 포함 특정 회원 조회 -->
+	<select id="select_userinfo" resultMap="userinfo_map">
+		SELECT info.user_id, info.user_pw, info.user_name, info.user_birth, info.user_regdate, info.user_tag,
+       		   info.user_rate, info.user_delflag, info.enabled, auth.role_name 
+		FROM trip.tbl_userinfo info INNER JOIN trip.tbl_user_auth auth ON info.user_id = auth.user_id
+		WHERE info.user_id = #{user_id}
+	</select>
+	
+	
+</mapper>

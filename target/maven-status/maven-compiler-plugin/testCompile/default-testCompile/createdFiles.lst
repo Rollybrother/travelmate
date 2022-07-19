@@ -1,0 +1,5 @@
+com\spring\tmz\controller\Review_reply_controller_test.class
+com\spring\tmz\mapper\Userinfo_test.class
+com\spring\tmz\controller\Review_controller_test.class
+com\spring\tmz\datasource\DataSourceTests.class
+com\spring\tmz\service\MyBoardServiceTests.class
